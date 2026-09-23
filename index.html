@@ -518,11 +518,14 @@ function crearEtiqueta(
     lng,
     texto,
     hecha,
-    icono = "📍"
+    icono = "📍",
+    final = false
 ) {
 
     const clase =
-        hecha
+    final
+    ? "icono-mapa final"
+    : hecha
         ? "icono-mapa hecha"
         : "icono-mapa";
 
@@ -1609,12 +1612,14 @@ if (
 ) {
 
     const planFinal =
-        crearEtiqueta(
-            40.3328,
-            -3.5270,
-            "🎉 ¡ENHORABUENA!",
-            false
-        );
+    crearEtiqueta(
+        40.3328,
+        -3.5270,
+        "🍕 ¡ENHORABUENA!",
+        false,
+        "🍕",
+        true
+    );
 
 
     planFinal.bindPopup(`
