@@ -6,7 +6,6 @@
 
     <title>Madrid por descubrir</title>
 
-    <!-- Leaflet -->
     <link
         rel="stylesheet"
         href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
@@ -46,6 +45,32 @@
             box-shadow: 0 5px 20px rgba(0,0,0,0.15);
         }
 
+        .codigo {
+            margin-top: 20px;
+            width: 100%;
+            box-sizing: border-box;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            font-size: 16px;
+        }
+
+        .boton {
+            margin-top: 10px;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 20px;
+            background: #333;
+            color: white;
+            cursor: pointer;
+            font-size: 15px;
+        }
+
+        .mensaje {
+            margin-top: 12px;
+            font-weight: bold;
+        }
+
     </style>
 </head>
 
@@ -63,8 +88,6 @@
 <div id="map"></div>
 
 
-<!-- Leaflet -->
-
 <script
     src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
 </script>
@@ -72,11 +95,13 @@
 
 <script>
 
-    // Crear el mapa centrado en Madrid
+    // -----------------------------------
+    // MAPA
+    // -----------------------------------
+
     const map = L.map('map').setView([40.4168, -3.7038], 12);
 
 
-    // Mapa de OpenStreetMap
     L.tileLayer(
         'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
         {
@@ -85,19 +110,136 @@
     ).addTo(map);
 
 
-    // Nuestro primer punto de prueba
+
+    // -----------------------------------
+    // PLAN 1
+    // -----------------------------------
+
     const punto1 = L.marker([40.4153, -3.6944])
         .addTo(map);
 
 
-    // Lo que aparece al pulsar el punto
     punto1.bindPopup(`
+
         <h3>🎁 Primer plan</h3>
 
         <p>
             Aquí aparecerá el primer plan sorpresa.
         </p>
+
+        <p>
+            Cuando termines el plan encontrarás
+            una palabra que te permitirá continuar.
+        </p>
+
+        <input
+            id="codigo"
+            class="codigo"
+            type="text"
+            placeholder="Introduce la palabra"
+        >
+
+        <button
+            class="boton"
+            onclick="comprobarCodigo()"
+        >
+            Desbloquear
+        </button>
+
+        <div
+            id="mensaje"
+            class="mensaje">
+        </div>
+
     `);
+
+
+
+    // -----------------------------------
+    // COMPROBAR CÓDIGO
+    // -----------------------------------
+
+    function comprobarCodigo() {
+
+        const campo =
+            document.getElementById("codigo");
+
+        const mensaje =
+            document.getElementById("mensaje");
+
+
+        const codigo =
+            campo.value.trim().toLowerCase();
+
+
+        // ESTE ES EL CÓDIGO DEL PLAN 1
+        if (codigo === "diego") {
+
+            localStorage.setItem(
+                "plan2desbloqueado",
+                "true"
+            );
+
+
+            mensaje.innerText =
+                "🎉 ¡Has desbloqueado el siguiente plan!";
+
+
+            crearPlan2();
+
+
+        } else {
+
+            mensaje.innerText =
+                "❌ Esa no es la palabra correcta.";
+
+        }
+
+    }
+
+
+
+    // -----------------------------------
+    // PLAN 2
+    // -----------------------------------
+
+    function crearPlan2() {
+
+        const punto2 =
+            L.marker([40.4230, -3.7090])
+            .addTo(map);
+
+
+        punto2.bindPopup(`
+
+            <h3>🎁 Segundo plan</h3>
+
+            <p>
+                ¡Has conseguido llegar hasta aquí!
+            </p>
+
+            <p>
+                Aquí pondremos el segundo plan.
+            </p>
+
+        `);
+
+    }
+
+
+
+    // -----------------------------------
+    // RECUPERAR PROGRESO
+    // -----------------------------------
+
+    if (
+        localStorage.getItem("plan2desbloqueado")
+        === "true"
+    ) {
+
+        crearPlan2();
+
+    }
 
 </script>
 
