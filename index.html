@@ -267,14 +267,158 @@
             }
 
         }
+/* ===== PORTADA DEL REGALO ===== */
 
+#portada {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background:
+        radial-gradient(circle at 20% 20%, rgba(255,255,255,0.8) 0 2px, transparent 3px),
+        radial-gradient(circle at 80% 30%, rgba(255,255,255,0.7) 0 3px, transparent 4px),
+        linear-gradient(135deg, #f8d7e3, #e8d5f2, #f7e4c5);
+    transition: opacity 0.9s ease, visibility 0.9s ease;
+}
+
+#portada.oculta {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+.portada-contenido {
+    position: relative;
+    z-index: 2;
+    width: min(90%, 520px);
+    text-align: center;
+    padding: 45px 25px;
+}
+
+.emoji-regalo {
+    font-size: 70px;
+    margin-bottom: 15px;
+    animation: flotar 3s ease-in-out infinite;
+}
+
+.portada-contenido h1 {
+    margin: 0;
+    font-family: Georgia, serif;
+    font-size: clamp(42px, 11vw, 76px);
+    line-height: 0.95;
+    color: #5b315f;
+    text-shadow: 2px 3px 0 rgba(255,255,255,0.65);
+}
+
+.portada-subtitulo {
+    margin: 28px 0 35px;
+    font-family: Georgia, serif;
+    font-size: 21px;
+    color: #5b315f;
+    font-style: italic;
+}
+
+.portada-contenido button {
+    border: none;
+    border-radius: 999px;
+    padding: 17px 30px;
+    font-size: 16px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    color: white;
+    background: #7b477d;
+    box-shadow: 0 8px 20px rgba(80, 40, 80, 0.25);
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.portada-contenido button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 25px rgba(80, 40, 80, 0.3);
+}
+
+@keyframes flotar {
+    0%, 100% {
+        transform: translateY(0) rotate(-3deg);
+    }
+    50% {
+        transform: translateY(-10px) rotate(3deg);
+    }
+}
+
+/* Confeti */
+
+.confeti,
+.confeti::before,
+.confeti::after {
+    position: absolute;
+    inset: 0;
+    content: "";
+    pointer-events: none;
+}
+
+.confeti {
+    opacity: 0.65;
+    background-image:
+        radial-gradient(circle, #ffffff 0 4px, transparent 5px),
+        radial-gradient(circle, #c98bb9 0 4px, transparent 5px),
+        radial-gradient(circle, #e7a96b 0 3px, transparent 4px),
+        radial-gradient(circle, #8eb6d9 0 4px, transparent 5px);
+    background-size: 95px 110px, 130px 145px, 80px 125px, 150px 100px;
+    background-position: 10px 20px, 50px 70px, 20px 80px, 90px 10px;
+    animation: confeti-mover 12s linear infinite;
+}
+
+@keyframes confeti-mover {
+    from {
+        transform: translateY(-20px);
+    }
+    to {
+        transform: translateY(80px);
+    }
+}
+
+@media (max-width: 600px) {
+
+    .portada-contenido {
+        padding: 30px 20px;
+    }
+
+    .emoji-regalo {
+        font-size: 58px;
+    }
+
+    .portada-subtitulo {
+        font-size: 18px;
+    }
+
+}
     </style>
 
 </head>
 
 
 <body>
+<div id="portada">
+    <div class="confeti"></div>
 
+    <div class="portada-contenido">
+        <div class="emoji-regalo">🎁</div>
+
+        <h1>FELICIDADES, CARI!</h1>
+
+        <p class="portada-subtitulo">
+            Hoy empieza una pequeña aventura...
+        </p>
+
+        <button onclick="abrirRegalo()">
+            ESPERO QUE TE GUSTE
+        </button>
+    </div>
+</div>
 
 <header>
 
@@ -294,6 +438,9 @@
 
 <script
     src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
+ function abrirRegalo() {
+    document.getElementById("portada").classList.add("oculta");
+}
 </script>
 
 
