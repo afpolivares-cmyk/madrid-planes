@@ -60,48 +60,68 @@
            ETIQUETAS DEL MAPA
         ------------------------------ */
 
-        .etiqueta-mapa {
+        /* ------------------------------
+   ICONOS DEL MAPA
+------------------------------ */
 
-            background: #8b5e83;
+.icono-mapa {
+    width: 42px;
+    height: 42px;
 
-            color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
-            padding: 8px 13px;
+    background: #8b5e83;
+    color: white;
 
-            border-radius: 18px;
+    border: 3px solid white;
+    border-radius: 50%;
 
-            font-family: Arial, sans-serif;
+    font-size: 21px;
 
-            font-size: 12px;
+    box-shadow:
+        0 3px 10px rgba(0,0,0,0.30);
 
-            font-weight: bold;
+    transition: all 0.3s ease;
 
-            white-space: nowrap;
+    position: relative;
+}
 
-            border: 2px solid white;
+.icono-mapa.hecha {
+    background: #6f9276;
+}
 
-            box-shadow:
-                0 2px 8px rgba(0,0,0,0.25);
+.icono-mapa.final {
+    background: #b8860b;
+    width: 48px;
+    height: 48px;
+    font-size: 24px;
+}
 
-            transition: all 0.3s ease;
+.icono-mapa .check {
+    position: absolute;
 
-        }
+    right: -5px;
+    bottom: -5px;
 
-        .etiqueta-mapa.hecha {
+    width: 18px;
+    height: 18px;
 
-            background: #6f9276;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
-        }
+    background: white;
+    color: #6f9276;
 
-        .etiqueta-mapa.final {
+    border-radius: 50%;
 
-            background: #b8860b;
+    font-size: 12px;
+    font-weight: bold;
 
-            font-size: 13px;
-
-            padding: 10px 15px;
-
-        }
+    box-shadow: 0 1px 4px rgba(0,0,0,0.25);
+}
 
         /* ------------------------------
            VENTANAS
