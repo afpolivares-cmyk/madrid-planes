@@ -2,7 +2,11 @@
 <html lang="es">
 
 <head>
-
+<script>
+if (localStorage.getItem("regaloAbierto") === "true") {
+    document.documentElement.classList.add("regalo-ya-abierto");
+}
+</script>
     <meta charset="UTF-8">
 
     <meta name="viewport"
@@ -415,6 +419,9 @@
         font-size: 18px;
     }
 
+}
+        html.regalo-ya-abierto #portada {
+    display: none;
 }
     </style>
 
@@ -1678,9 +1685,8 @@ ajustarVista();
 
 
 function abrirRegalo() {
-
+    localStorage.setItem("regaloAbierto", "true");
     document.getElementById("portada").classList.add("oculta");
-
 }
 
 </script>
