@@ -1680,18 +1680,18 @@ function ajustarVista() {
 
     if (estaHecho("plan6")) {
 
-    map.setView(
-    [40.3590, -3.5490],
-    15,
-    {
-        animate: true,
-        duration: 1.5
+        map.setView(
+            [40.3590, -3.5490],
+            15,
+            {
+                animate: true,
+                duration: 1.5
+            }
+        );
+
     }
-);
 
-}
-
-    else if (estaHecho("plan5")) {
+    else if (estaHecho("plan1")) {
 
         map.setView(
             [40.4168, -3.7038],
@@ -1700,14 +1700,14 @@ function ajustarVista() {
 
     }
 
-   else {
+    else {
 
-    map.setView(
-        [40.3590, -3.5490],
-        14
-    );
+        map.setView(
+            [40.3590, -3.5490],
+            14
+        );
 
-}
+    }
 
 }
 
