@@ -1,92 +1,296 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
 
     <title>Madrid por descubrir</title>
 
+    <!-- Leaflet -->
     <link
         rel="stylesheet"
         href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-    />
+    >
 
     <style>
 
+        * {
+            box-sizing: border-box;
+        }
+
         body {
             margin: 0;
-            font-family: Arial, sans-serif;
+            font-family: Georgia, "Times New Roman", serif;
             background: #f5f1e8;
             color: #333;
         }
 
         header {
             text-align: center;
-            padding: 25px 15px 15px;
+            padding: 30px 20px 20px;
         }
 
         h1 {
             margin: 0 0 8px;
-            font-size: 32px;
+            font-size: 34px;
+            font-weight: normal;
         }
 
         header p {
             margin: 0;
-            color: #666;
+            color: #777;
+            font-family: Arial, sans-serif;
         }
 
         #map {
-            width: 92%;
-            max-width: 1000px;
-            height: 650px;
+            width: 94%;
+            max-width: 1100px;
+            height: 680px;
             margin: 20px auto 40px;
             border-radius: 20px;
             overflow: hidden;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+            box-shadow: 0 5px 25px rgba(0,0,0,0.15);
+        }
+
+        /* ------------------------------
+           ETIQUETAS DEL MAPA
+        ------------------------------ */
+
+        .etiqueta-mapa {
+
+            background: #8b5e83;
+
+            color: white;
+
+            padding: 8px 13px;
+
+            border-radius: 18px;
+
+            font-family: Arial, sans-serif;
+
+            font-size: 12px;
+
+            font-weight: bold;
+
+            white-space: nowrap;
+
+            border: 2px solid white;
+
+            box-shadow:
+                0 2px 8px rgba(0,0,0,0.25);
+
+            transition: all 0.3s ease;
+
+        }
+
+        .etiqueta-mapa.hecha {
+
+            background: #6f9276;
+
+        }
+
+        .etiqueta-mapa.final {
+
+            background: #b8860b;
+
+            font-size: 13px;
+
+            padding: 10px 15px;
+
+        }
+
+        /* ------------------------------
+           VENTANAS
+        ------------------------------ */
+
+        .popup {
+
+            max-width: 330px;
+
+            font-family: Arial, sans-serif;
+
+            line-height: 1.5;
+
+        }
+
+        .popup h2 {
+
+            font-family: Georgia, serif;
+
+            font-size: 21px;
+
+            line-height: 1.2;
+
+            margin-top: 0;
+
+            margin-bottom: 15px;
+
+            color: #4f3650;
+
+        }
+
+        .popup p {
+
+            margin-bottom: 13px;
+
+        }
+
+        .popup .fecha {
+
+            font-weight: bold;
+
+        }
+
+        .popup .pista {
+
+            margin-top: 20px;
+
+            padding: 10px;
+
+            background: #f5f1e8;
+
+            border-radius: 10px;
+
+            font-size: 13px;
+
         }
 
         .codigo {
-            margin-top: 20px;
+
             width: 100%;
-            box-sizing: border-box;
-            padding: 12px;
+
+            padding: 11px;
+
+            margin-top: 10px;
+
             border: 1px solid #ccc;
-            border-radius: 10px;
+
+            border-radius: 9px;
+
             font-size: 16px;
+
         }
 
         .boton {
-            margin-top: 10px;
-            padding: 12px 20px;
+
+            width: 100%;
+
+            margin-top: 9px;
+
+            padding: 11px;
+
             border: none;
+
             border-radius: 20px;
-            background: #333;
+
+            background: #4f3650;
+
             color: white;
+
             cursor: pointer;
+
             font-size: 15px;
+
+        }
+
+        .boton:hover {
+
+            opacity: 0.9;
+
+        }
+
+        .boton-hecho {
+
+            width: 100%;
+
+            margin-top: 12px;
+
+            padding: 11px;
+
+            border: none;
+
+            border-radius: 20px;
+
+            background: #6f9276;
+
+            color: white;
+
+            cursor: pointer;
+
+            font-size: 15px;
+
         }
 
         .mensaje {
-            margin-top: 12px;
+
+            margin-top: 10px;
+
             font-weight: bold;
+
+            text-align: center;
+
+        }
+
+        .mensaje.ok {
+
+            color: #557a5c;
+
+        }
+
+        .mensaje.error {
+
+            color: #a04c4c;
+
+        }
+
+        /* ------------------------------
+           MÓVIL
+        ------------------------------ */
+
+        @media (max-width: 600px) {
+
+            h1 {
+                font-size: 28px;
+            }
+
+            #map {
+                width: 96%;
+                height: 620px;
+            }
+
+            .popup {
+                max-width: 270px;
+            }
+
         }
 
     </style>
+
 </head>
 
+
 <body>
+
 
 <header>
 
     <h1>Madrid por descubrir</h1>
 
-    <p>Un mapa de planes para ti</p>
+    <p>
+        Un mapa de planes para ti
+    </p>
 
 </header>
 
 
 <div id="map"></div>
 
+
+<!-- Leaflet -->
 
 <script
     src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
@@ -95,45 +299,258 @@
 
 <script>
 
-    // -----------------------------------
-    // MAPA
-    // -----------------------------------
 
-    const map = L.map('map').setView([40.4168, -3.7038], 12);
+/* =========================================================
+   MAPA
+========================================================= */
+
+const map =
+    L.map('map')
+     .setView([40.4168, -3.7038], 12);
 
 
-    L.tileLayer(
-        'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+L.tileLayer(
+    'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+    {
+        attribution:
+            '&copy; OpenStreetMap contributors'
+    }
+).addTo(map);
+
+
+
+/* =========================================================
+   PROGRESO
+========================================================= */
+
+function guardar(nombre) {
+
+    localStorage.setItem(nombre, "true");
+
+}
+
+
+function estaHecho(nombre) {
+
+    return localStorage.getItem(nombre) === "true";
+
+}
+
+
+
+/* =========================================================
+   CREAR ETIQUETAS
+========================================================= */
+
+function crearEtiqueta(
+    lat,
+    lng,
+    texto,
+    hecha
+) {
+
+    const clase =
+        hecha
+        ? "etiqueta-mapa hecha"
+        : "etiqueta-mapa";
+
+
+    return L.marker(
+        [lat, lng],
         {
-            attribution: '&copy; OpenStreetMap contributors'
+            icon: L.divIcon({
+
+                className: "",
+
+                html:
+                    `<div class="${clase}">
+                        ${hecha ? "✓ " : ""}
+                        ${texto}
+                    </div>`,
+
+                iconSize: null,
+
+                iconAnchor: [0, 20]
+
+            })
         }
     ).addTo(map);
 
+}
 
 
-    // -----------------------------------
-    // PLAN 1
-    // -----------------------------------
 
-    const punto1 = L.marker([40.4153, -3.6944])
-        .addTo(map);
+/* =========================================================
+   PLAN 1
+========================================================= */
+
+const plan1 = crearEtiqueta(
+    40.3328,
+    -3.5270,
+    "SOPLA LAS VELAS Y PIDE UN DESEO",
+    estaHecho("plan1")
+);
 
 
-    punto1.bindPopup(`
+plan1.bindPopup(`
 
-        <h3>🎁 Primer plan</h3>
+<div class="popup">
 
-        <p>
-            Aquí aparecerá el primer plan sorpresa.
+    <h2>
+        SOPLA LAS VELAS Y PIDE UN DESEO
+    </h2>
+
+    <p class="fecha">
+        Fecha: HOY
+    </p>
+
+    <p>
+        Espero que el deseo conlleve
+        relajarte y tener tiempo para leer.
+    </p>
+
+    <p>
+        Disfruta.
+    </p>
+
+    <p>
+        ¡Te quiero!
+    </p>
+
+    <div class="pista">
+
+        <strong>Pista código:</strong><br>
+
+        Nombre de tu hijo
+
+    </div>
+
+    <input
+        id="codigo1"
+        class="codigo"
+        type="text"
+        placeholder="Introduce la palabra"
+    >
+
+    <button
+        class="boton"
+        onclick="comprobarCodigo1()"
+    >
+        Desbloquear siguiente plan
+    </button>
+
+    <div
+        id="mensaje1"
+        class="mensaje">
+    </div>
+
+</div>
+
+`);
+
+
+
+/* =========================================================
+   CÓDIGO PLAN 1
+========================================================= */
+
+function comprobarCodigo1() {
+
+    const codigo =
+        document
+        .getElementById("codigo1")
+        .value
+        .trim()
+        .toLowerCase();
+
+
+    const mensaje =
+        document.getElementById("mensaje1");
+
+
+    if (codigo === "diego") {
+
+        guardar("plan1");
+
+        mensaje.className =
+            "mensaje ok";
+
+        mensaje.innerText =
+            "🎉 ¡Correcto! Has desbloqueado el siguiente plan.";
+
+        setTimeout(() => {
+
+            location.reload();
+
+        }, 900);
+
+    }
+
+    else {
+
+        mensaje.className =
+            "mensaje error";
+
+        mensaje.innerText =
+            "No es esa... piensa un poquito más 😉";
+
+    }
+
+}
+
+
+
+/* =========================================================
+   PLAN 2
+========================================================= */
+
+let plan2;
+
+
+if (estaHecho("plan1")) {
+
+    plan2 = crearEtiqueta(
+        40.4015,
+        -3.6810,
+        "MÚSICA CON DIEGO",
+        estaHecho("plan2")
+    );
+
+
+    plan2.bindPopup(`
+
+    <div class="popup">
+
+        <h2>
+            MÚSICA CON DIEGO
+        </h2>
+
+        <p class="fecha">
+            Fecha: 10 de octubre 2026 a las 11:00
         </p>
 
         <p>
-            Cuando termines el plan encontrarás
-            una palabra que te permitirá continuar.
+            Prepárate para disfrutar de la
+            música con nuestro hijo.
+            Un plan en familia para recordar
+            la suerte que tenemos.
         </p>
+
+        <p>
+            ¡Te queremos!
+        </p>
+
+        <div class="pista">
+
+            <strong>Pista código:</strong><br>
+
+            Tu código siguiente será el estilo
+            musical que escucharemos
+
+        </div>
 
         <input
-            id="codigo"
+            id="codigo2"
             class="codigo"
             type="text"
             placeholder="Introduce la palabra"
@@ -141,107 +558,959 @@
 
         <button
             class="boton"
-            onclick="comprobarCodigo()"
+            onclick="comprobarCodigo2()"
         >
-            Desbloquear
+            Desbloquear siguiente plan
         </button>
 
         <div
-            id="mensaje"
+            id="mensaje2"
             class="mensaje">
         </div>
 
+    </div>
+
     `);
 
+}
 
 
-    // -----------------------------------
-    // COMPROBAR CÓDIGO
-    // -----------------------------------
 
-    function comprobarCodigo() {
+/* =========================================================
+   CÓDIGO PLAN 2
+========================================================= */
 
-        const campo =
-            document.getElementById("codigo");
+function comprobarCodigo2() {
 
-        const mensaje =
-            document.getElementById("mensaje");
-
-
-        const codigo =
-            campo.value.trim().toLowerCase();
+    const codigo =
+        document
+        .getElementById("codigo2")
+        .value
+        .trim()
+        .toLowerCase();
 
 
-        // ESTE ES EL CÓDIGO DEL PLAN 1
-        if (codigo === "diego") {
+    const mensaje =
+        document.getElementById("mensaje2");
 
-            localStorage.setItem(
-                "plan2desbloqueado",
-                "true"
+
+    if (codigo === "jazz") {
+
+        guardar("plan2");
+
+        mensaje.className =
+            "mensaje ok";
+
+        mensaje.innerText =
+            "🎵 ¡Correcto!";
+
+        setTimeout(() => {
+
+            location.reload();
+
+        }, 900);
+
+    }
+
+    else {
+
+        mensaje.className =
+            "mensaje error";
+
+        mensaje.innerText =
+            "Ese no es el estilo musical... 😉";
+
+    }
+
+}
+
+
+
+/* =========================================================
+   PLAN 3
+========================================================= */
+
+let plan3;
+
+
+if (estaHecho("plan2")) {
+
+    plan3 = crearEtiqueta(
+        40.4281,
+        -3.6936,
+        "¡YUMIIIII!",
+        estaHecho("plan3")
+    );
+
+
+    plan3.bindPopup(`
+
+    <div class="popup">
+
+        <h2>
+            ¡YUMIIIII!
+        </h2>
+
+        <p class="fecha">
+            Fecha: A determinar por nosotros
+            pero ¡YA ESTÁ PAGADO!
+        </p>
+
+        <p>
+            ¿Qué te parecería disfrutar de
+            una comida o una cena de nuevo
+            los dos solos?
+        </p>
+
+        <p>
+            Vamos a disfrutar del placer de
+            comer sin hacer deporte mientras
+            y poder estar ambos en la misma
+            mesa al mismo tiempo:
+            ¡QUE GENIAL! ¡VOLVEMOS A SER JÓVENES!
+        </p>
+
+        <p>
+            ¡¡A MEMER!!
+        </p>
+
+        <div class="pista">
+
+            <strong>Pista código:</strong><br>
+
+            Tu código vendrá dado con el
+            final de la comida/cena
+
+        </div>
+
+        <input
+            id="codigo3"
+            class="codigo"
+            type="text"
+            placeholder="Introduce la palabra"
+        >
+
+        <button
+            class="boton"
+            onclick="comprobarCodigo3()"
+        >
+            Desbloquear siguiente plan
+        </button>
+
+        <div
+            id="mensaje3"
+            class="mensaje">
+        </div>
+
+    </div>
+
+    `);
+
+}
+
+
+
+/* =========================================================
+   CÓDIGO PLAN 3
+========================================================= */
+
+function comprobarCodigo3() {
+
+    const codigo =
+        document
+        .getElementById("codigo3")
+        .value
+        .trim()
+        .toLowerCase();
+
+
+    const mensaje =
+        document.getElementById("mensaje3");
+
+
+    if (codigo === "magia") {
+
+        guardar("plan3");
+
+        mensaje.className =
+            "mensaje ok";
+
+        mensaje.innerText =
+            "✨ ¡Correcto!";
+
+        setTimeout(() => {
+
+            location.reload();
+
+        }, 900);
+
+    }
+
+    else {
+
+        mensaje.className =
+            "mensaje error";
+
+        mensaje.innerText =
+            "Todavía no... 😉";
+
+    }
+
+}
+
+
+
+/* =========================================================
+   PLAN 4
+========================================================= */
+
+let plan4;
+
+
+if (estaHecho("plan3")) {
+
+    plan4 = crearEtiqueta(
+        40.4454,
+        -3.6768,
+        "¿A QUE NO LO ADIVINAS? MAGIC",
+        estaHecho("plan4")
+    );
+
+
+    plan4.bindPopup(`
+
+    <div class="popup">
+
+        <h2>
+            ¿A QUE NO LO ADIVINAS? MAGIC
+        </h2>
+
+        <p class="fecha">
+            Fecha: 24 de octubre a las 22:00
+        </p>
+
+        <p>
+            Magia es habernos encontrado.
+            Magia es tener la relación tan
+            bonita que tenemos.
+            Magia es que sigamos queriéndonos
+            tanto después de tantos años.
+            Magia es tener el hijo que tenemos.
+            Magia es saber que quiero seguir
+            contigo mucho tiempo más. Etc.
+        </p>
+
+        <p>
+            Pero para trucos sin más misterio
+            que el nuestro, vamos a ir a un
+            espectáculo de:
+            <strong>¡MAGIA DE CERCA!</strong>
+        </p>
+
+        <div class="pista">
+
+            <strong>Pista código:</strong><br>
+
+            A ver si lo adivina el mago
+
+        </div>
+
+        <input
+            id="codigo4"
+            class="codigo"
+            type="text"
+            placeholder="Introduce la palabra"
+        >
+
+        <button
+            class="boton"
+            onclick="comprobarCodigo4()"
+        >
+            Desbloquear siguiente plan
+        </button>
+
+        <div
+            id="mensaje4"
+            class="mensaje">
+        </div>
+
+    </div>
+
+    `);
+
+}
+
+
+
+/* =========================================================
+   CÓDIGO PLAN 4
+========================================================= */
+
+function comprobarCodigo4() {
+
+    const codigo =
+        document
+        .getElementById("codigo4")
+        .value
+        .trim()
+        .toLowerCase();
+
+
+    const mensaje =
+        document.getElementById("mensaje4");
+
+
+    if (codigo === "fantasma") {
+
+        guardar("plan4");
+
+        mensaje.className =
+            "mensaje ok";
+
+        mensaje.innerText =
+            "🎩 ¡Correcto!";
+
+        setTimeout(() => {
+
+            location.reload();
+
+        }, 900);
+
+    }
+
+    else {
+
+        mensaje.className =
+            "mensaje error";
+
+        mensaje.innerText =
+            "El mago todavía no te ha dado la respuesta... 😉";
+
+    }
+
+}
+
+
+
+/* =========================================================
+   PLAN 5
+========================================================= */
+
+let plan5;
+
+
+if (estaHecho("plan4")) {
+
+    plan5 = crearEtiqueta(
+        40.4345,
+        -3.6968,
+        "EN METRO CON DIEGO",
+        estaHecho("plan5")
+    );
+
+
+    plan5.bindPopup(`
+
+    <div class="popup">
+
+        <h2>
+            EN METRO CON DIEGO
+        </h2>
+
+        <p class="fecha">
+            Fecha: 25 de octubre a las 10:30
+        </p>
+
+        <p>
+            Hay trenes que hay que cogerlos
+            según llegan.
+        </p>
+
+        <p>
+            Nos encanta compartir contigo
+            el viaje.
+        </p>
+
+        <p>
+            ¡Te quiero!
+        </p>
+
+        <div class="pista">
+
+            <strong>Pista código:</strong><br>
+
+            ¿Dónde estamos?
+
+        </div>
+
+        <input
+            id="codigo5"
+            class="codigo"
+            type="text"
+            placeholder="Introduce la palabra"
+        >
+
+        <button
+            class="boton"
+            onclick="comprobarCodigo5()"
+        >
+            Desbloquear siguiente plan
+        </button>
+
+        <div
+            id="mensaje5"
+            class="mensaje">
+        </div>
+
+    </div>
+
+    `);
+
+}
+
+
+
+/* =========================================================
+   CÓDIGO PLAN 5
+========================================================= */
+
+function comprobarCodigo5() {
+
+    const codigo =
+        document
+        .getElementById("codigo5")
+        .value
+        .trim()
+        .toLowerCase();
+
+
+    const mensaje =
+        document
+        .getElementById("mensaje5");
+
+
+    if (codigo === "madrid") {
+
+        guardar("plan5");
+
+        mensaje.className =
+            "mensaje ok";
+
+        mensaje.innerText =
+            "🚇 ¡Correcto!";
+
+        setTimeout(() => {
+
+            location.reload();
+
+        }, 900);
+
+    }
+
+    else {
+
+        mensaje.className =
+            "mensaje error";
+
+        mensaje.innerText =
+            "¿Dónde estamos...? 😉";
+
+    }
+
+}
+
+
+
+/* =========================================================
+   PLAN 6
+========================================================= */
+
+const lugaresPlan6 = [
+
+    {
+        id: "lugar1",
+
+        lat: 40.41669,
+        lng: -3.70505,
+
+        titulo:
+            "Casa Palazuelo.",
+
+        texto: `
+
+        <p>
+        A pocos pasos de la Puerta del Sol,
+        encontrarás uno de los edificios más
+        impresionantes de Madrid:
+        la Casa Palazuelo.
+        </p>
+
+        <p>
+        Declarado Bien de Interés Cultural,
+        este edificio fue construido en 1919
+        por Antonio Palacios, inspirado en la
+        arquitectura de Chicago.
+        </p>
+
+        <p>
+        Quiero hacer un pequeño paréntesis
+        para hablarles del arquitecto:
+        <strong>Antonio Palacios</strong> no fue
+        un arquitecto del montón.
+        Fue un verdadero genio -quizá
+        eclipsado en su época por la figura
+        de Gaudí-.
+        </p>
+
+        <p>
+        Palacios fue quien se encargó de
+        <strong>diseñar las primeras estaciones
+        del metro de Madrid así como el logo
+        del Metro</strong> que conocemos hoy.
+        </p>
+
+        <p>
+        También diseñó muchos de los edificios
+        más emblemáticos de la ciudad como
+        el Palacio de Comunicaciones (Cibeles),
+        la Casa de las Cariátides (sede central
+        del Instituto Cervantes), el Hospital de
+        Jornaleros de Maudes (actual conserjería
+        de Transporte de la CCAA) o el edificio
+        del Círculo de Bellas Artes.
+        </p>
+
+        <p>
+        Aunque el exterior es sobrio, su interior
+        te deslumbrará con su elegante diseño,
+        que incluye un luminoso patio interior,
+        barandillas de hierro negro y dorado,
+        y una espectacular escalera.
+        </p>
+
+        <p>
+        ¿La razón por la que su exterior es tan
+        sencillo? Palazuelo no quería que
+        eclipsara las construcciones de la
+        cercana Puerta del Sol.
+        </p>
+
+        `
+
+    },
+
+
+    {
+        id: "lugar2",
+
+        lat: 40.41352,
+        lng: -3.71143,
+
+        titulo:
+            "Jardín del Príncipe de Anglona. Todos los días de 10am a 6:30pm",
+
+        texto: `
+
+        <p>
+        Tan a la vista que pasan desapercibidos,
+        <strong>los Jardines del príncipe de Anglona</strong>
+        se ubican tras una pequeña puerta de la
+        Plaza de la Paja en La Latina.
+        </p>
+
+        <p>
+        Son un pequeño espacio verde donde reina
+        la paz y que fueron <strong>construidos a
+        mediados del siglo XVIII</strong> junto al
+        Palacio Príncipe de Anglona, del cual
+        toma el nombre.
+        </p>
+
+        <p>
+        Los jardines son de estilo neoclásico con
+        algunas pinceladas de estilo hispano-árabes
+        y representan uno de los pocos jardines
+        nobiliarios que quedan en la capital.
+        </p>
+
+        <p>
+        En la actualidad ya no pertenecen al
+        palacete, sino que son municipales.
+        Aunque no están muy cuidados, estos
+        jardines municipales aún conservan su
+        encanto con su pérgola de rosas.
+        </p>
+
+        `
+
+    },
+
+
+    {
+        id: "lugar3",
+
+        lat: 40.42536,
+        lng: -3.72560,
+
+        titulo:
+            "Ermita de San Antonio de la Florida. Martes a domingo de 9:30am a 8pm",
+
+        texto: `
+
+        <p>
+        Otro de los rincones secretos de Madrid
+        es la <strong>“Capilla Sixtina Goyesca”</strong>
+        que podrás encontrar en una de las
+        ermitas de la capital.
+        </p>
+
+        <p>
+        Aunque mucha gente pasa muy cerca de la
+        <strong>Ermita de San Antonio de la Florida</strong>,
+        muy poca gente sabe la joyita que su
+        interior alberga: unos impresionantes
+        frescos de Francisco de Goya así como
+        su tumba.
+        </p>
+
+        <p>
+        Aunque por fuera la ermita de estilo
+        neoclásico es relativamente sobria,
+        el interior <strong>alberga los frescos que
+        Goya</strong> pintó a finales del siglo XVIII
+        y que representan el trance de San Antonio
+        ante el pueblo lisboeta y otros momentos
+        bíblicos.
+        </p>
+
+        <p>
+        Además, desde 1919 se ubica en esta ermita
+        la tumba con los restos mortales de Goya
+        (excepto su cabeza) y se aprecia la lápida
+        que trajeron desde Burdeos, ciudad en la
+        que falleció y donde fue originalmente
+        enterrado.
+        </p>
+
+        <p>
+        A principios del siglo XX se declaró la
+        ermita Monumento Nacional y, para conservarla,
+        el Ayuntamiento de Madrid decidió construir
+        una idéntica junto a la primera para el culto,
+        manteniendo la original como museo de Goya.
+        </p>
+
+        `
+
+    },
+
+
+    {
+        id: "lugar4",
+
+        lat: 40.431236,
+        lng: -3.681397,
+
+        titulo:
+            "El jardín privado y oculto de la Fundación Juan March. Lunes a sábado de 10am a 8pm y domingos de 10am a 2pm.",
+
+        texto: `
+
+        <p>
+        La Fundación March, ubicada en pleno
+        barrio de Salamanca, además de contar
+        con “el museo pequeño más bello del mundo”
+        con exposiciones temporales muy interesantes
+        o salas de conciertos y conferencias,
+        cuenta con un precioso jardín que es un
+        oasis de paz.
+        </p>
+
+        <p>
+        Además de contar con varias esculturas,
+        tiene una pequeña barra en su patio para
+        que te puedas tomar una limonada, café o
+        una cerveza fresquita.
+        </p>
+
+        `
+
+    },
+
+
+    {
+        id: "lugar5",
+
+        lat: 40.421101,
+        lng: -3.680549,
+
+        titulo:
+            "La montaña de los gatos. Todos los días de 6am a medianoche",
+
+        texto: `
+
+        <p>
+        Tras muchos años de estar cerrado, este año
+        se ha reabierto la montaña artificial conocida
+        como “La Montaña de los Gatos”.
+        </p>
+
+        <p>
+        Se trata de una montaña artificial que cuenta
+        con un espacio abovedado en el interior
+        -de acceso gratuito- y la zona exterior tiene
+        una cascada, zonas verdes y puedes subir a
+        lo “más alto”
+        </p>
+
+        `
+
+    },
+
+
+    {
+        id: "lugar6",
+
+        lat: 40.393714,
+        lng: -3.699969,
+
+        titulo:
+            "Palacio de Cristal de Arganzuela",
+
+        texto: `
+
+        <p>
+        Todos conocen el “Palacio de Cristal”
+        del Parque del Retiro, pero ¿sabías que
+        tiene un mellizo?
+        </p>
+
+        <p>
+        A orillas del Manzanares, en pleno parque
+        de Madrid Río se alza de este pequeño
+        invernadero que data de inicios del siglo XX
+        y que sigue el modelo de invernadero
+        decimonónico del estilo del de Viena o Londres.
+        </p>
+
+        <p>
+        Se trata de un espacio precioso con una sala
+        central y cuatro zonas donde podrás admirar
+        todo tipo de plantas. Es de entrada gratuita
+        y abre todas las mañanas.
+        </p>
+
+        `
+
+    }
+
+];
+
+
+
+/* =========================================================
+   MOSTRAR PLAN 6
+========================================================= */
+
+function mostrarPlan6() {
+
+    lugaresPlan6.forEach(lugar => {
+
+        const hecha =
+            estaHecho(lugar.id);
+
+
+        const marcador =
+            crearEtiqueta(
+                lugar.lat,
+                lugar.lng,
+                lugar.titulo,
+                hecha
             );
 
 
-            mensaje.innerText =
-                "🎉 ¡Has desbloqueado el siguiente plan!";
+        marcador.bindPopup(`
 
+        <div class="popup">
 
-            crearPlan2();
+            <h2>
+                ${lugar.titulo}
+            </h2>
 
+            ${lugar.texto}
 
-        } else {
+            ${
+                hecha
 
-            mensaje.innerText =
-                "❌ Esa no es la palabra correcta.";
+                ?
 
-        }
+                `
+                <div class="mensaje ok">
+                    ✓ Lugar visitado
+                </div>
+                `
 
-    }
+                :
 
+                `
+                <button
+                    class="boton-hecho"
+                    onclick="marcarVisitado('${lugar.id}')"
+                >
+                    ✓ Marcar como visitado
+                </button>
+                `
+            }
 
-
-    // -----------------------------------
-    // PLAN 2
-    // -----------------------------------
-
-    function crearPlan2() {
-
-        const punto2 =
-            L.marker([40.4230, -3.7090])
-            .addTo(map);
-
-
-        punto2.bindPopup(`
-
-            <h3>🎁 Segundo plan</h3>
-
-            <p>
-                ¡Has conseguido llegar hasta aquí!
-            </p>
-
-            <p>
-                Aquí pondremos el segundo plan.
-            </p>
+        </div>
 
         `);
 
+    });
+
+}
+
+
+
+/* =========================================================
+   MARCAR LUGAR VISITADO
+========================================================= */
+
+function marcarVisitado(id) {
+
+    guardar(id);
+
+    comprobarFinPlan6();
+
+    location.reload();
+
+}
+
+
+
+/* =========================================================
+   COMPROBAR SI TERMINÓ PLAN 6
+========================================================= */
+
+function comprobarFinPlan6() {
+
+    const todos =
+        lugaresPlan6.every(
+            lugar => estaHecho(lugar.id)
+        );
+
+
+    if (todos) {
+
+        guardar("plan6");
+
     }
 
+}
 
 
-    // -----------------------------------
-    // RECUPERAR PROGRESO
-    // -----------------------------------
 
-    if (
-        localStorage.getItem("plan2desbloqueado")
-        === "true"
-    ) {
+/* =========================================================
+   SI PLAN 5 ESTÁ HECHO → MOSTRAR LOS 6 LUGARES
+========================================================= */
 
-        crearPlan2();
+if (estaHecho("plan5")) {
+
+    mostrarPlan6();
+
+}
+
+
+
+/* =========================================================
+   PLAN 7
+========================================================= */
+
+if (
+    estaHecho("plan6")
+) {
+
+    const planFinal =
+        crearEtiqueta(
+            40.3328,
+            -3.5270,
+            "🎉 ¡ENHORABUENA!",
+            false
+        );
+
+
+    planFinal.bindPopup(`
+
+    <div class="popup">
+
+        <h2>
+            ¡ENHORABUENA!<br>
+            Completaste el regalo.
+        </h2>
+
+        <p>
+            Debes estar cansada:
+        </p>
+
+        <p>
+            Te invito a cenar
+            <strong>Pecora Nera</strong>:
+        </p>
+
+        <p>
+            <strong>TÚ ELIGES LAS PIZZAS</strong>
+        </p>
+
+    </div>
+
+    `);
+
+}
+
+
+
+/* =========================================================
+   AJUSTAR MAPA AL PROGRESO
+========================================================= */
+
+function ajustarVista() {
+
+    if (estaHecho("plan6")) {
+
+        map.setView(
+            [40.4168, -3.7038],
+            12
+        );
 
     }
+
+    else if (estaHecho("plan5")) {
+
+        map.setView(
+            [40.4168, -3.7038],
+            12
+        );
+
+    }
+
+    else {
+
+        map.setView(
+            [40.4168, -3.7038],
+            12
+        );
+
+    }
+
+}
+
+
+ajustarVista();
+
 
 </script>
 
+
 </body>
+
 </html>
