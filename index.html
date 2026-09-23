@@ -510,13 +510,14 @@ function crearEtiqueta(
     lat,
     lng,
     texto,
-    hecha
+    hecha,
+    icono = "📍"
 ) {
 
     const clase =
         hecha
-        ? "etiqueta-mapa hecha"
-        : "etiqueta-mapa";
+        ? "icono-mapa hecha"
+        : "icono-mapa";
 
 
     return L.marker(
@@ -528,20 +529,19 @@ function crearEtiqueta(
 
                 html:
                     `<div class="${clase}">
-                        ${hecha ? "✓ " : ""}
-                        ${texto}
+                        ${icono}
+                        ${hecha ? '<span class="check">✓</span>' : ""}
                     </div>`,
 
-                iconSize: null,
+                iconSize: [42, 42],
 
-                iconAnchor: [0, 20]
+                iconAnchor: [21, 21]
 
             })
         }
     ).addTo(map);
 
 }
-
 
 
 /* =========================================================
