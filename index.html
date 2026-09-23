@@ -309,7 +309,9 @@
     visibility: hidden;
     pointer-events: none;
 }
-
+#portada.no-mostrar {
+    display: none;
+}
 .portada-contenido {
     position: relative;
     z-index: 2;
@@ -422,7 +424,7 @@
 
 
 <body>
-<div id="portada">
+<div id="portada" class="portada-inicial">
     <div class="confeti"></div>
 
     <div class="portada-contenido">
@@ -1683,9 +1685,11 @@ ajustarVista();
     document.getElementById("portada").classList.add("oculta");
 
 }
-    if (localStorage.getItem("regaloAbierto") === "true") {
+   if (localStorage.getItem("regaloAbierto") === "true") {
 
-    document.getElementById("portada").classList.add("oculta");
+    document.getElementById("portada").classList.add("no-mostrar");
+
+}
 
 }
 
