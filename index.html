@@ -101,6 +101,26 @@ if (localStorage.getItem("regaloAbierto") === "true") {
     width: 48px;
     height: 48px;
     font-size: 24px;
+    animation: pulso-final 2s ease-in-out infinite;
+    box-shadow:
+        0 0 0 0 rgba(184, 134, 11, 0.5),
+        0 3px 10px rgba(0,0,0,0.30);
+}
+
+@keyframes pulso-final {
+    0%, 100% {
+        transform: scale(1);
+        box-shadow:
+            0 0 0 0 rgba(184, 134, 11, 0.45),
+            0 3px 10px rgba(0,0,0,0.30);
+    }
+
+    50% {
+        transform: scale(1.08);
+        box-shadow:
+            0 0 0 10px rgba(184, 134, 11, 0),
+            0 4px 14px rgba(0,0,0,0.35);
+    }
 }
 
 .icono-mapa .check {
@@ -559,8 +579,8 @@ function crearEtiqueta(
 ========================================================= */
 
 const plan1 = crearEtiqueta(
-    40.3328,
-    -3.5270,
+    40.3590,
+    -3.5490,
     "SOPLA LAS VELAS Y PIDE UN DESEO",
     estaHecho("plan1"),
     "🎂"
@@ -1613,8 +1633,8 @@ if (
 
     const planFinal =
     crearEtiqueta(
-        40.3328,
-        -3.5270,
+        40.3590,
+        -3.5490,
         "🍕 ¡ENHORABUENA!",
         false,
         "🍕",
