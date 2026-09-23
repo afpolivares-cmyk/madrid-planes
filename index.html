@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Madrid por descubrir</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f5f1e8;
+            color: #333;
+            text-align: center;
+        }
+
+        header {
+            padding: 35px 20px 20px;
+        }
+
+        h1 {
+            margin-bottom: 8px;
+            font-size: 32px;
+        }
+
+        header p {
+            margin-top: 0;
+            color: #666;
+        }
+
+        .mapa {
+            position: relative;
+            width: 90%;
+            max-width: 800px;
+            height: 600px;
+            margin: 20px auto;
+            background: #ddd;
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        .plan {
+            position: absolute;
+            padding: 12px 18px;
+            background: white;
+            border-radius: 30px;
+            border: none;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .plan:hover {
+            transform: scale(1.05);
+        }
+
+        #plan1 {
+            top: 35%;
+            left: 40%;
+        }
+
+        #plan2,
+        #plan3 {
+            display: none;
+        }
+
+        .ventana {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.45);
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .contenido {
+            background: white;
+            max-width: 500px;
+            width: 100%;
+            padding: 30px;
+            border-radius: 20px;
+            box-sizing: border-box;
+        }
+
+        .contenido button {
+            margin-top: 20px;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+        }
+
+        .desbloquear {
+            background: #333;
+            color: white;
+        }
+
+        .cerrar {
+            background: #eee;
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h1>Madrid por descubrir</h1>
+    <p>Un mapa de planes para ti</p>
+</header>
+
+<div class="mapa">
+
+    <button class="plan" id="plan1" onclick="abrirPlan(1)">
+        📍 Plan 1
+    </button>
+
+    <button class="plan" id="plan2" onclick="abrirPlan(2)">
+        📍 Plan 2
+    </button>
+
+    <button class="plan" id="plan3" onclick="abrirPlan(3)">
+        📍 Plan 3
+    </button>
+
+</div>
+
+
+<div class="ventana" id="ventana">
+
+    <div class="contenido">
+
+        <h2 id="titulo"></h2>
+
+        <p id="descripcion"></p>
+
+        <button class="desbloquear" onclick="completarPlan()">
+            ✅ He hecho este plan
+        </button>
+
+        <br>
+
+        <button class="cerrar" onclick="cerrarVentana()">
+            Cerrar
+        </button>
+
+    </div>
+
+</div>
+
+
+<script>
+
+let planActual = 1;
+
+function abrirPlan(numero) {
+
+    planActual = numero;
+
+    const titulo = document.getElementById("titulo");
+    const descripcion = document.getElementById("descripcion");
+
+    if (numero === 1) {
+        titulo.innerText = "Primer plan";
+        descripcion.innerText =
+            "Aquí aparecerá el primer plan que prepares.";
+    }
+
+    if (numero === 2) {
+        titulo.innerText = "Segundo plan";
+        descripcion.innerText =
+            "Aquí aparecerá el segundo plan.";
+    }
+
+    if (numero === 3) {
+        titulo.innerText = "Tercer plan";
+        descripcion.innerText =
+            "Aquí aparecerá el tercer plan.";
+    }
+
+    document.getElementById("ventana").style.display = "flex";
+}
+
+
+function cerrarVentana() {
+    document.getElementById("ventana").style.display = "none";
+}
+
+
+function completarPlan() {
+
+    if (planActual === 1) {
+        document.getElementById("plan2").style.display = "block";
+    }
+
+    if (planActual === 2) {
+        document.getElementById("plan3").style.display = "block";
+    }
+
+    cerrarVentana();
+}
+
+</script>
+
+</body>
+</html>
