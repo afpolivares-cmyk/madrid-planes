@@ -1676,8 +1676,17 @@ function ajustarVista() {
 
 ajustarVista();
     
-    function abrirRegalo() {
+   function abrirRegalo() {
+
+    localStorage.setItem("regaloAbierto", "true");
+
     document.getElementById("portada").classList.add("oculta");
+
+}
+    if (localStorage.getItem("regaloAbierto") === "true") {
+
+    document.getElementById("portada").classList.add("oculta");
+
 }
 
 </script>
